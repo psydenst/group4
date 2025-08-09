@@ -4,12 +4,15 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Calendar, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
+import { signInWithEmail, signInWithGoogle, getCurrentUser, onAuthStateChange } from '../utils/auth';
+
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState('');
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,9 +25,18 @@ export default function LoginPage() {
     }, 1500);
   };
 
-  const handleGoogleLogin = () => {
-    alert('Google OAuth would be implemented here!');
-  };
+	const handleGoogleLogin = async () => {
+		setIsLoading(true);
+		setError('');
+
+		const result = await signInWithGoogle();
+		
+		if (!result.success) {
+			setError(result.error || 'Erro no login com Google');
+			setIsLoading(false);
+		}
+		// Para OAuth, o loading continuará até o redirecionamento
+	};
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
