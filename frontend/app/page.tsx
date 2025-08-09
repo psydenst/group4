@@ -13,7 +13,7 @@ const mockProducts: Product[] = [
     name: 'Mountain Adventure Hiking',
     description: 'Experience breathtaking views and challenging trails in the Rocky Mountains. Perfect for adventure seekers looking for an unforgettable outdoor experience.',
     price: 149,
-    image: 'https://images.pexels.com/photos/618833/pexels-photo-618833.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: 'https://trampolin-jumping-rio.staging.ticketbro.com/_next/image?url=https%3A%2F%2Fdrw21st1r555p.cloudfront.net%2Foptimized%2FDEFAULT%2F7c00cd54-ebf1-4003-8762-c7f86f22ab0e-1x-optimized&w=384&q=75',
     category: 'Adventure Sports',
   },
   {
@@ -21,7 +21,7 @@ const mockProducts: Product[] = [
     name: 'Sunset Sailing Experience',
     description: 'Sail into the golden hour with our premium sunset cruise. Enjoy champagne and gourmet snacks while watching the sun dip below the horizon.',
     price: 89,
-    image: 'https://images.pexels.com/photos/1001682/pexels-photo-1001682.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: 'https://beach-tennis-rio.staging.ticketbro.com/_next/image?url=https%3A%2F%2Fdrw21st1r555p.cloudfront.net%2Foptimized%2FDEFAULT%2F02ff7d65-572a-4708-a32d-80dae08c9cfa-2x-optimized&w=256&q=75',
     category: 'Water Sports',
   },
   {
@@ -29,7 +29,7 @@ const mockProducts: Product[] = [
     name: 'Wine Tasting Tour',
     description: 'Discover the finest local wines with our expert sommelier guide. Visit three premium wineries and learn about the art of winemaking.',
     price: 125,
-    image: 'https://images.pexels.com/photos/1407846/pexels-photo-1407846.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: 'https://santa-teresa-rooftop.staging.ticketbro.com/_next/image?url=https%3A%2F%2Fdrw21st1r555p.cloudfront.net%2Foptimized%2FDEFAULT%2F29d348a5-dc00-41e2-9195-5316f878220f-1x-optimized&w=384&q=75',
     category: 'Food & Drink',
   },
   {
@@ -37,7 +37,7 @@ const mockProducts: Product[] = [
     name: 'Photography Workshop',
     description: 'Master the art of landscape photography with professional guidance. Capture stunning shots in the most photogenic locations.',
     price: 199,
-    image: 'https://images.pexels.com/photos/1264210/pexels-photo-1264210.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: 'https://rio-football.staging.ticketbro.com/_next/image?url=https%3A%2F%2Fdrw21st1r555p.cloudfront.net%2Foptimized%2FDEFAULT%2F1de7c432-d3bf-4a26-8184-6b2997645d03-1x-optimized&w=384&q=75',
     category: 'Creative Arts',
   },
   {
@@ -45,7 +45,7 @@ const mockProducts: Product[] = [
     name: 'Spa & Wellness Retreat',
     description: 'Rejuvenate your mind and body with our luxury spa treatments. Includes massage, facial, and access to thermal pools.',
     price: 299,
-    image: 'https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: 'https://sao-paulo-tennis.staging.ticketbro.com/_next/image?url=https%3A%2F%2Fdrw21st1r555p.cloudfront.net%2Foptimized%2FDEFAULT%2F8b99ea3d-1941-4e9e-93de-92d44d54f94c-1x-optimized&w=384&q=75',
     category: 'Wellness',
   },
   {
@@ -53,7 +53,7 @@ const mockProducts: Product[] = [
     name: 'Culinary Masterclass',
     description: 'Learn to cook like a professional chef with hands-on instruction. Create a three-course meal using fresh, local ingredients.',
     price: 175,
-    image: 'https://images.pexels.com/photos/2284166/pexels-photo-2284166.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: 'https://sao-paulo-afterwork.staging.ticketbro.com/_next/image?url=https%3A%2F%2Fdrw21st1r555p.cloudfront.net%2Foptimized%2FDEFAULT%2Fe13d848c-194b-42c1-ac59-10ca26910f24-1x-optimized&w=384&q=75',
     category: 'Food & Drink',
   },
 ];
