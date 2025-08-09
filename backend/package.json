@@ -9,14 +9,16 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "fastify": "^4.x.x",
+    "axios": "^1.11.0",
     "dotenv": "^16.x.x",
+    "fastify": "^4.x.x",
     "pg": "^8.x.x"
   },
   "devDependencies": {
-    "typescript": "^5.x.x",
+    "@types/axios": "^0.9.36",
     "@types/node": "^20.x.x",
-	"@types/pg": "^8.x.x",
-    "tsx": "^4.x.x"
+    "@types/pg": "^8.x.x",
+    "tsx": "^4.x.x",
+    "typescript": "^5.x.x"
   }
 }
