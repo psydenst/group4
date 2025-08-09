@@ -1,0 +1,26 @@
+# Excluir pastas e arquivos de build
+.next/
+dist/
+build/
+out/
+
+# Excluir a pasta de dependências do Node.js
+node_modules/
+
+# Excluir arquivos de log, de cache e de debug
+*.log
+npm-debug.log*
+yarn-error.log
+.DS_Store
+.env
+.env.local
+.cache
+
+# Excluir arquivos relacionados a versionamento
+.git
+.gitignore
+.gitattributes
+
+# Excluir o próprio Dockerfile e .dockerignore
+Dockerfile
+.dockerignore
