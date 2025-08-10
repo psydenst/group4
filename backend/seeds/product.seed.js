@@ -9,6 +9,7 @@ const mockProducts = [
     price: 149,
     latitude: -22.9035, // Exemplo de coordenada para Nova York, EUA
     longitude: -43.2096,
+    category: 'in door'
   },
   {
     name: 'Beach Tennis Rio',
@@ -17,6 +18,7 @@ const mockProducts = [
     price: 89,
     latitude: -22.9035, // Exemplo de coordenada para Los Angeles, EUA
     longitude: -43.2096,
+    category: 'out door'
   },
   {
     name: 'Santa Teresa Rooftop',
@@ -25,6 +27,7 @@ const mockProducts = [
     price: 125,
     latitude: -22.9035, // Exemplo de coordenada para Nova York, EUA
     longitude: -43.2096,
+    category: 'in door'
   },
   {
     name: 'Rio Football',
@@ -33,6 +36,7 @@ const mockProducts = [
     price: 199,
     latitude: -22.9035, // Exemplo de coordenada para Nova York, EUA
     longitude: -43.2096,
+    category: 'out door'
   },
   {
     name: 'Sao Paulo Tennis',
@@ -41,6 +45,7 @@ const mockProducts = [
     price: 299,
     latitude: -23.5489, // Exemplo de coordenada para Las Vegas, EUA
     longitude: -46.6388,
+    category: 'out door'
   },
   {
     name: 'Sao Paulo Afterwork Drinks',
@@ -49,6 +54,7 @@ const mockProducts = [
     price: 175,
     latitude: -23.5489, // Exemplo de coordenada para Las Vegas, EUA
     longitude: -46.6388,
+    category: 'in door'
   },
   {
     name: 'Padel Tennis Rio',
@@ -57,6 +63,7 @@ const mockProducts = [
     price: 175,
     latitude: -22.9035, // Exemplo de coordenada para Chicago, EUA
     longitude: -43.2096,
+    category: 'in door'
   },
 ];
 
@@ -79,7 +86,7 @@ async function main() {
                 basePrice: productData.price,
                 maxPrice: productData.price + 50,
                 climaInfluence: 5,
-                category: 'asdakwj',
+                category: productData.category,
               },
             },
           },
