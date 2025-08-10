@@ -1,6 +1,13 @@
 import axios from 'axios';
 import { WeatherRequest, WeatherResponse, OpenMeteoResponse } from '../types/weather';
 
+class WeatherServiceError extends Error {
+  constructor(message: string, public code: string) {
+    super(message);
+    this.name = 'WeatherServiceError';
+  }
+}
+
 export class WeatherService {
   private baseUrl = 'https://api.open-meteo.com/v1/forecast';
 
@@ -35,10 +42,15 @@ export class WeatherService {
         conditions: { sunny, rainChance, tempMin, tempMax }
       };
     } catch (error) {
-      // Fallback para dados simulados em caso de erro
-      return this.getMockWeight();
-    }
+      if (error instanceof WeatherServiceError) {
+        throw error; // Re-lançar erros customizados
+      }
+      throw new WeatherServiceError(
+        'Falha na comunicação com serviço meteorológico',
+        'API_ERROR'
+      );
   }
+}
 
   private async fetchWeatherData(req: WeatherRequest): Promise<OpenMeteoResponse> {
     const response = await axios.get<OpenMeteoResponse>(this.baseUrl, {
