@@ -1,10 +1,20 @@
+export interface ProductConfig {
+  minPrice: number;
+  maxPrice: number;
+  basePrice: number;
+  priceToday: number;
+  climaInfluence: number;
+  category: String;
+}
+
 export interface Product {
   id: string;
   name: string;
   description: string;
-  price: number;
-  image: string;
-  category: string;
+  img_link: string;
+  latitude: DoubleRange;
+  longitude: DoubleRange;
+  productConfig: ProductConfig;
 }
 
 export interface WeatherData {

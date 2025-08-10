@@ -20,7 +20,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 border border-white/20 hover:border-white/30 group">
       <div className="relative h-48 mb-4 rounded-xl overflow-hidden">
         <Image
-          src={product.image}
+          src={product.img_link}
           alt={product.name}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -34,7 +34,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="space-y-3">
         <div className="flex items-center gap-2 text-white/70">
           <MapPin className="w-4 h-4" />
-          <span className="text-sm">{product.category}</span>
+          <span className="text-sm">{product.productConfig.category}</span>
         </div>
         
         <h3 className="text-xl font-bold text-white group-hover:text-blue-300 transition-colors">
@@ -47,7 +47,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         
         <div className="flex items-center justify-between pt-4">
           <div className="text-white">
-            <span className="text-2xl font-bold">${product.price}</span>
+            <span className="text-2xl font-bold">${product.productConfig.basePrice}</span>
             <span className="text-white/60 text-sm ml-1">per person</span>
           </div>
           
