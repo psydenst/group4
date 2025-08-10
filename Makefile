@@ -1,38 +1,25 @@
-# Makefile
-.PHONY: all up down build clean logs db-only
+all:
+	@printf "Launch configuration ${name}...\n"
+	@docker compose up -d
 
-all: build up
-
-build:
-	docker-compose build
-
-up:
-	docker-compose up -d
+re:
+	@printf "Rebuild configuration $(name)...\n"
+	@docker compose build --no-cache
+	@docker compose up -d
 
 down:
-	docker-compose down
+	@printf "Stopping configuration ${name}...\n"
+	@docker compose down
+
+clean: down
+	@printf "Cleaning configuration ${name}...\n"
+	@docker system prune -a
 
 fclean:
-	docker-compose down -v
-	docker system prune -af
-	docker volume prune -f
-	docker network prune -f
-	docker container prune -f
-	docker image prune -af
+	@printf "Total clean of all configurations docker\n"
+	@docker stop $$(docker ps -qa)
+	@docker system prune --all --force --volumes
+	@docker network prune --force
+	@docker volume prune --force
 
-clean:
-	docker-compose down
-	docker system prune -f
-	docker volume prune -f
-
-logs:
-	docker-compose logs -f
-
-backend:
-	docker-compose up backend
-
-frontend:
-	docker-compose up frontend
-
-db-only:
-	docker-compose up db pgadmin
+.PHONY: all re down clean collect fclean

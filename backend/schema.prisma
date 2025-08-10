@@ -1,47 +1,31 @@
-//
-// Este é o arquivo de schema do Prisma.
-// Ele define os modelos do seu banco de dados e as relações entre eles.
-//
-
-// O 'datasource' aponta para o seu banco de dados.
-// Estamos usando PostgreSQL aqui.
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL") // A URL de conexão é carregada de uma variável de ambiente
 }
 
-// O 'generator' cria o cliente do Prisma, que você usará no seu código.
-// Por padrão, ele gera o cliente para Node.js.
 generator client {
   provider = "prisma-client-js"
 }
 
-// Modelo para a tabela 'product'.
-// Note que o 'id' tem '@id' e '@default(autoincrement())',
-// que é o equivalente ao 'SERIAL' do PostgreSQL.
 model Product {
   id              Int            @id @default(autoincrement())
   name            String         @db.VarChar(255)
   description     String?        @db.VarChar(512)
+  img_link        String         @db.VarChar(512)
   latitude        Decimal        @db.Decimal(11, 8)
   longitude       Decimal        @db.Decimal(11, 8)
-  product_configs ProductConfig[] // Uma relação 1 para N: um produto pode ter várias configurações.
+  productConfig   ProductConfig?
 }
 
-// Modelo para a tabela 'product_config'.
-// As colunas de preço e influência do clima são definidas aqui.
-// A chave estrangeira 'productId' cria o vínculo com o 'Product'.
 model ProductConfig {
   id              Int      @id @default(autoincrement())
-  minPrice        Decimal  @db.Decimal(10, 2)
-  maxPrice        Decimal  @db.Decimal(10, 2)
+  minPrice        Int
+  basePrice       Int
+  maxPrice        Int
   climaInfluence  Int
-  
-  // A coluna que armazena a chave estrangeira.
-  productId       Int
-  
-  // A relação '@relation' liga esta tabela ao modelo 'Product',
-  // usando 'productId' como chave de ligação.
-  product         Product  @relation(fields: [productId], references: [id])
-}
+  category        String   @db.VarChar(120)
 
+  productId       Int      @unique
+  
+  product         Product?  @relation(fields: [productId], references: [id])
+}

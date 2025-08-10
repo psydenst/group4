@@ -1,73 +1,46 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Product } from '@/types';
 import ProductCard from '@/components/ProductCard';
-import WeatherCalendar from '@/components/WeatherCalendar';
 import Header from '@/components/Header';
 import { Search, Filter, MapPin } from 'lucide-react';
 
-const mockProducts: Product[] = [
-  {
-    id: '1',
-    name: 'Mountain Adventure Hiking',
-    description: 'Experience breathtaking views and challenging trails in the Rocky Mountains. Perfect for adventure seekers looking for an unforgettable outdoor experience.',
-    price: 149,
-    image: 'https://trampolin-jumping-rio.staging.ticketbro.com/_next/image?url=https%3A%2F%2Fdrw21st1r555p.cloudfront.net%2Foptimized%2FDEFAULT%2F7c00cd54-ebf1-4003-8762-c7f86f22ab0e-1x-optimized&w=384&q=75',
-    category: 'Adventure Sports',
-  },
-  {
-    id: '2',
-    name: 'Sunset Sailing Experience',
-    description: 'Sail into the golden hour with our premium sunset cruise. Enjoy champagne and gourmet snacks while watching the sun dip below the horizon.',
-    price: 89,
-    image: 'https://beach-tennis-rio.staging.ticketbro.com/_next/image?url=https%3A%2F%2Fdrw21st1r555p.cloudfront.net%2Foptimized%2FDEFAULT%2F02ff7d65-572a-4708-a32d-80dae08c9cfa-2x-optimized&w=256&q=75',
-    category: 'Water Sports',
-  },
-  {
-    id: '3',
-    name: 'Wine Tasting Tour',
-    description: 'Discover the finest local wines with our expert sommelier guide. Visit three premium wineries and learn about the art of winemaking.',
-    price: 125,
-    image: 'https://santa-teresa-rooftop.staging.ticketbro.com/_next/image?url=https%3A%2F%2Fdrw21st1r555p.cloudfront.net%2Foptimized%2FDEFAULT%2F29d348a5-dc00-41e2-9195-5316f878220f-1x-optimized&w=384&q=75',
-    category: 'Food & Drink',
-  },
-  {
-    id: '4',
-    name: 'Photography Workshop',
-    description: 'Master the art of landscape photography with professional guidance. Capture stunning shots in the most photogenic locations.',
-    price: 199,
-    image: 'https://rio-football.staging.ticketbro.com/_next/image?url=https%3A%2F%2Fdrw21st1r555p.cloudfront.net%2Foptimized%2FDEFAULT%2F1de7c432-d3bf-4a26-8184-6b2997645d03-1x-optimized&w=384&q=75',
-    category: 'Creative Arts',
-  },
-  {
-    id: '5',
-    name: 'Spa & Wellness Retreat',
-    description: 'Rejuvenate your mind and body with our luxury spa treatments. Includes massage, facial, and access to thermal pools.',
-    price: 299,
-    image: 'https://sao-paulo-tennis.staging.ticketbro.com/_next/image?url=https%3A%2F%2Fdrw21st1r555p.cloudfront.net%2Foptimized%2FDEFAULT%2F8b99ea3d-1941-4e9e-93de-92d44d54f94c-1x-optimized&w=384&q=75',
-    category: 'Wellness',
-  },
-  {
-    id: '6',
-    name: 'Culinary Masterclass',
-    description: 'Learn to cook like a professional chef with hands-on instruction. Create a three-course meal using fresh, local ingredients.',
-    price: 175,
-    image: 'https://sao-paulo-afterwork.staging.ticketbro.com/_next/image?url=https%3A%2F%2Fdrw21st1r555p.cloudfront.net%2Foptimized%2FDEFAULT%2Fe13d848c-194b-42c1-ac59-10ca26910f24-1x-optimized&w=384&q=75',
-    category: 'Food & Drink',
-  },
-];
-
 export default function Home() {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://0.0.0.0:8080/products/getAll');
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        
+        const data: Product[] = await response.json();
+        setProducts(data);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  const categories = ['All', ...Array.from(new Set(mockProducts.map(p => p.category)))];
+  const categories = ['All', ...Array.from(new Set(products.map(p => p?.productConfig?.category)))];
 
-  const filteredProducts = mockProducts.filter(product => {
+  const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
+                         product.description?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'All' || product.productConfig.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
