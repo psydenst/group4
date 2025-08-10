@@ -15,7 +15,6 @@ export const signInWithGoogle = async (): Promise<AuthResult> => {
       provider: 'google',
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
-				flowType: 'pkce', // Usar PKCE flow
         // Usar PKCE flow - mais seguro que implicit flow
         queryParams: {
           access_type: 'offline',
