@@ -9,7 +9,8 @@ const mockProducts = [
     price: 149,
     latitude: -22.9035, // Exemplo de coordenada para Nova York, EUA
     longitude: -43.2096,
-    category: 'in door'
+    category: 'in door',
+    personPrice: 40
   },
   {
     name: 'Beach Tennis Rio',
@@ -18,7 +19,8 @@ const mockProducts = [
     price: 89,
     latitude: -22.9035, // Exemplo de coordenada para Los Angeles, EUA
     longitude: -43.2096,
-    category: 'out door'
+    category: 'out door',
+    personPrice: 40
   },
   {
     name: 'Santa Teresa Rooftop',
@@ -27,7 +29,8 @@ const mockProducts = [
     price: 125,
     latitude: -22.9035, // Exemplo de coordenada para Nova York, EUA
     longitude: -43.2096,
-    category: 'in door'
+    category: 'in door',
+    personPrice: 40
   },
   {
     name: 'Rio Football',
@@ -36,7 +39,8 @@ const mockProducts = [
     price: 199,
     latitude: -22.9035, // Exemplo de coordenada para Nova York, EUA
     longitude: -43.2096,
-    category: 'out door'
+    category: 'out door',
+    personPrice: 40
   },
   {
     name: 'Sao Paulo Tennis',
@@ -45,7 +49,8 @@ const mockProducts = [
     price: 299,
     latitude: -23.5489, // Exemplo de coordenada para Las Vegas, EUA
     longitude: -46.6388,
-    category: 'out door'
+    category: 'out door',
+    personPrice: 40
   },
   {
     name: 'Sao Paulo Afterwork Drinks',
@@ -54,7 +59,8 @@ const mockProducts = [
     price: 175,
     latitude: -23.5489, // Exemplo de coordenada para Las Vegas, EUA
     longitude: -46.6388,
-    category: 'in door'
+    category: 'in door',
+    personPrice: 40
   },
   {
     name: 'Padel Tennis Rio',
@@ -63,7 +69,8 @@ const mockProducts = [
     price: 175,
     latitude: -22.9035, // Exemplo de coordenada para Chicago, EUA
     longitude: -43.2096,
-    category: 'in door'
+    category: 'in door',
+    personPrice: 40
   },
 ];
 
@@ -80,6 +87,7 @@ async function main() {
             img_link: productData.img_link,
             latitude: productData.latitude,
             longitude: productData.longitude,
+            personPrice: productData.personPrice, 
             productConfig: {
               create: {
                 minPrice: productData.price - 25,
