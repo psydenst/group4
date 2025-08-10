@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Product } from '@/types';
+import { IProduct } from '@/types';
 import ProductCard from '@/components/ProductCard';
 import Header from '@/components/Header';
 import { Search, Filter, MapPin } from 'lucide-react';
 
 export default function Home() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<IProduct[]>([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -15,12 +15,12 @@ export default function Home() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://0.0.0.0:8080/products/getAll');
+        const response = await fetch('http://localhost:8080/products/getAll');
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }
         
-        const data: Product[] = await response.json();
+        const data: IProduct[] = await response.json();
         setProducts(data);
       } catch (err: any) {
         setError(err.message);
