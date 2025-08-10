@@ -2,18 +2,36 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Calendar } from 'lucide-react';
+import { Calendar, Route } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function AdminPage() {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const handleReportClick = () => {
+  const dashboardsBotao = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      alert('Aqui você pode implementar a funcionalidade de Relatórios.');
-    }, 1000);
-  };
+      router.push('/dashboards');
+    }, 500);
+  }
+
+  const manager_product = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      router.push('/managerproducts');
+    }, 500);
+  }
+
+  const manager_reservations = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      router.push('/managereservations');
+    }, 500);
+  }
 
   const baseButtonClasses = 
     "w-full font-semibold text-white py-3 px-4 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:hover:scale-100";
@@ -34,7 +52,7 @@ export default function AdminPage() {
         {/* Painel */}
         <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 space-y-4">
           <button
-            onClick={handleReportClick}
+            onClick={dashboardsBotao}
             disabled={loading}
             className={`${baseButtonClasses} bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-500 disabled:to-gray-600`}
           >
@@ -42,12 +60,16 @@ export default function AdminPage() {
           </button>
 
           <button
+            onClick={manager_product}
+            disabled={loading}
             className={`${baseButtonClasses} bg-gradient-to-r from-blue-500 to-purple-600 hover:from-green-600 hover:to-green-700`}
           >
             Manage Products
           </button>
 
           <button
+            onClick={manager_reservations}
+            disabled={loading}
             className={`${baseButtonClasses} bg-gradient-to-r from-blue-500 to-purple-600 hover:from-yellow-500 hover:to-yellow-600`}
           >
             Manage Reservations
