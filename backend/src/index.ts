@@ -25,6 +25,7 @@ server.register(productsRoutes, { prefix: '/products' });
 
 // Iniciar
 server.listen({ port: 8080, host: '0.0.0.0' }, (err) => {
-  if (err) throw err;
+  if (err)
+    throw err;
   console.log('🌤️ Servidor rodando na porta 8080');
 });
