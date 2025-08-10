@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { IProduct } from '../types/products';
 const prisma = new PrismaClient();
 
 /**
@@ -18,7 +19,28 @@ export const getAllProducts = async () => {
     console.error('Erro ao buscar produtos:', error);
     throw new Error('Falha ao buscar produtos.');
   } finally {
-    // Garante que a conexão com o banco de dados seja fechada.
     await prisma.$disconnect();
+  }
+};
+
+export const getOneProduct = async (id: number) => {
+  try {
+    const product = await prisma.product.findFirst({
+      where: {
+        id: id,
+      },
+      select: {
+        description: true,
+        id: true,
+        img_link: true,
+        latitude: true,
+        longitude: true,
+        name: true,
+        productConfig: true,
+      },
+    });
+    return product;
+  }catch  (err: any) {
+    console.error('Error fetching product:', err.message);
   }
 };
