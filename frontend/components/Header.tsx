@@ -20,15 +20,6 @@ export default function Header() {
             <Link href="/" className="text-white/80 hover:text-white transition-colors">
               Home
             </Link>
-            <Link href="/experiences" className="text-white/80 hover:text-white transition-colors">
-              Experiences
-            </Link>
-            <Link href="/about" className="text-white/80 hover:text-white transition-colors">
-              About
-            </Link>
-            <Link href="/contact" className="text-white/80 hover:text-white transition-colors">
-              Contact
-            </Link>
           </nav>
 
           <div className="flex items-center gap-4">
@@ -54,15 +45,6 @@ export default function Header() {
             <nav className="flex flex-col gap-4">
               <Link href="/" className="text-white/80 hover:text-white transition-colors">
                 Home
-              </Link>
-              <Link href="/experiences" className="text-white/80 hover:text-white transition-colors">
-                Experiences
-              </Link>
-              <Link href="/about" className="text-white/80 hover:text-white transition-colors">
-                About
-              </Link>
-              <Link href="/contact" className="text-white/80 hover:text-white transition-colors">
-                Contact
               </Link>
             </nav>
           </div>
