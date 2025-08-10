@@ -1,4 +1,4 @@
-export interface ProductConfig {
+export interface IProductConfig {
   minPrice: number;
   maxPrice: number;
   basePrice: number;
@@ -7,14 +7,15 @@ export interface ProductConfig {
   category: String;
 }
 
-export interface Product {
+export interface IProduct {
   id: string;
   name: string;
   description: string;
   img_link: string;
   latitude: DoubleRange;
   longitude: DoubleRange;
-  productConfig: ProductConfig;
+  personPrice: number;
+  productConfig: IProductConfig;
 }
 
 export interface WeatherData {

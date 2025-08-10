@@ -1,12 +1,12 @@
 'use client';
 
-import { Product } from '@/types';
+import { IProduct } from '@/types';
 import { Calendar, MapPin, Star } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 interface ProductCardProps {
-  product: Product;
+  product: IProduct;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
