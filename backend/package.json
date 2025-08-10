@@ -9,6 +9,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@fastify/cors": "^8.5.0",
     "@prisma/client": "^6.13.0",
     "axios": "^1.11.0",
     "dotenv": "^16.x.x",

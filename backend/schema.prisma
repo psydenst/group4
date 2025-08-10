@@ -23,9 +23,10 @@ model Product {
   id              Int            @id @default(autoincrement())
   name            String         @db.VarChar(255)
   description     String?        @db.VarChar(512)
+  img_link        String         @db.VarChar(512)
   latitude        Decimal        @db.Decimal(11, 8)
   longitude       Decimal        @db.Decimal(11, 8)
-  product_configs ProductConfig[] // Uma relação 1 para N: um produto pode ter várias configurações.
+  productConfig   ProductConfig[]
 }
 
 // Modelo para a tabela 'product_config'.
@@ -33,15 +34,16 @@ model Product {
 // A chave estrangeira 'productId' cria o vínculo com o 'Product'.
 model ProductConfig {
   id              Int      @id @default(autoincrement())
-  minPrice        Decimal  @db.Decimal(10, 2)
-  maxPrice        Decimal  @db.Decimal(10, 2)
+  minPrice        Int
+  basePrice       Int
+  maxPrice        Int
   climaInfluence  Int
-  
-  // A coluna que armazena a chave estrangeira.
-  productId       Int
+  category        String   @db.VarChar(120)
+
+  // A coluna que armazena a chave estrangeira agora é @unique.
+  productId       Int      @unique
   
   // A relação '@relation' liga esta tabela ao modelo 'Product',
   // usando 'productId' como chave de ligação.
   product         Product  @relation(fields: [productId], references: [id])
 }
-
