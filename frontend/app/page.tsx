@@ -59,7 +59,6 @@ const mockProducts: Product[] = [
 ];
 
 export default function Home() {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
@@ -71,19 +70,6 @@ export default function Home() {
     const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
-
-  const handleBookNow = (productId: string) => {
-    const product = mockProducts.find(p => p.id === productId);
-    if (product) {
-      setSelectedProduct(product);
-    }
-  };
-
-  const handleDateSelect = (date: Date) => {
-    console.log('Booking confirmed for:', selectedProduct?.name, 'on', date);
-    // Here you would typically send the booking data to your backend
-    alert(`Booking confirmed for ${selectedProduct?.name} on ${date.toDateString()}!`);
-  };
 
   return (
     <div className="min-h-screen">
@@ -154,7 +140,6 @@ export default function Home() {
               <ProductCard
                 key={product.id}
                 product={product}
-                onBookNow={handleBookNow}
               />
             ))}
           </div>
@@ -166,16 +151,6 @@ export default function Home() {
           )}
         </div>
       </section>
-
-      {/* Weather Calendar Modal */}
-      {selectedProduct && (
-        <WeatherCalendar
-          productId={selectedProduct.id}
-          productName={selectedProduct.name}
-          onClose={() => setSelectedProduct(null)}
-          onDateSelect={handleDateSelect}
-        />
-      )}
     </div>
   );
 }

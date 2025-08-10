@@ -44,6 +44,14 @@ const generateWeatherData = (): WeatherData[] => {
   return data;
 };
 
+const getProductPrice = (productId: string): number =>  {
+  if (productId == '1')
+  {
+    return 10;
+  }
+  return 0;
+}
+
 export default function WeatherCalendar({ productId, productName, onClose, onDateSelect }: WeatherCalendarProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
@@ -58,7 +66,7 @@ export default function WeatherCalendar({ productId, productName, onClose, onDat
     );
   };
 
-  const tileContent = ({ date, view }: { date: Date; view: string }) => {
+  const tileContent = ({ date, view}: { date: Date; view: string}) => {
     if (view === 'month') {
       const weather = getWeatherForDate(date);
       if (weather) {

@@ -3,13 +3,19 @@
 import { Product } from '@/types';
 import { Calendar, MapPin, Star } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface ProductCardProps {
   product: Product;
-  onBookNow: (productId: string) => void;
 }
 
-export default function ProductCard({ product, onBookNow }: ProductCardProps) {
+export default function ProductCard({ product }: ProductCardProps) {
+  const router = useRouter();
+
+  const handleBookNow = () => {
+    router.push(`/product/${product.id}`);
+  };
+
   return (
     <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 border border-white/20 hover:border-white/30 group">
       <div className="relative h-48 mb-4 rounded-xl overflow-hidden">
@@ -46,7 +52,7 @@ export default function ProductCard({ product, onBookNow }: ProductCardProps) {
           </div>
           
           <button
-            onClick={() => onBookNow(product.id)}
+            onClick={handleBookNow}
             className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 hover:scale-105 active:scale-95"
           >
             <Calendar className="w-4 h-4" />
