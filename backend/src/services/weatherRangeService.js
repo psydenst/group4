@@ -36,13 +36,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WeatherService = void 0;
+exports.WeatherRangeService = void 0;
+exports.getWeatherRange = getWeatherRange;
 var axios_1 = require("axios");
-var WeatherService = /** @class */ (function () {
-    function WeatherService() {
+function getWeatherRange(req) {
+    return __awaiter(this, void 0, void 0, function () {
+        var svc;
+        return __generator(this, function (_a) {
+            svc = new WeatherRangeService();
+            return [2 /*return*/, svc.getWeatherRange(req)];
+        });
+    });
+}
+var WeatherRangeService = /** @class */ (function () {
+    function WeatherRangeService() {
         this.baseUrl = 'https://api.open-meteo.com/v1/forecast';
     }
-    WeatherService.prototype.getWeight = function (req) {
+    // Rota original - 1 dia
+    WeatherRangeService.prototype.getWeight = function (req) {
         return __awaiter(this, void 0, void 0, function () {
             var data, sunny, rainChance, tempMin, tempMax, weight, error_1;
             return __generator(this, function (_a) {
@@ -83,7 +94,65 @@ var WeatherService = /** @class */ (function () {
             });
         });
     };
-    WeatherService.prototype.fetchWeatherData = function (req) {
+    // Nova rota - Range de dias (1-16)
+    WeatherRangeService.prototype.getWeatherRange = function (req) {
+        return __awaiter(this, void 0, void 0, function () {
+            var days, data, dailyData, totalWeight, i, weatherCode, sunny, rainChance, tempMin, tempMax, weight, error_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        days = Math.min(Math.max(req.days, 1), 16);
+                        return [4 /*yield*/, this.fetchWeatherRangeData(req, days)];
+                    case 1:
+                        data = _a.sent();
+                        dailyData = [];
+                        totalWeight = 0;
+                        // Processar cada dia
+                        for (i = 0; i < data.daily.time.length; i++) {
+                            weatherCode = data.daily.weathercode[i];
+                            sunny = this.isSunny(weatherCode);
+                            rainChance = data.daily.precipitation_probability_max[i] || 0;
+                            tempMin = data.daily.temperature_2m_min[i];
+                            tempMax = data.daily.temperature_2m_max[i];
+                            weight = 1.0;
+                            if (sunny)
+                                weight += 0.5;
+                            if (rainChance < 30)
+                                weight += 0.3;
+                            if (tempMin >= 18 && tempMax <= 28) {
+                                weight += 0.2;
+                            }
+                            else if (tempMin < 10 || tempMax > 35) {
+                                weight -= 0.3;
+                            }
+                            weight = Math.round(weight * 100) / 100;
+                            totalWeight += weight;
+                            dailyData.push({
+                                date: data.daily.time[i],
+                                weight: weight,
+                                sunny: sunny,
+                                rainChance: rainChance,
+                                tempMin: Math.round(tempMin * 10) / 10,
+                                tempMax: Math.round(tempMax * 10) / 10,
+                                weatherCode: weatherCode
+                            });
+                        }
+                        return [2 /*return*/, {
+                                days: dailyData,
+                                averageWeight: Math.round((totalWeight / dailyData.length) * 100) / 100,
+                                totalDays: dailyData.length
+                            }];
+                    case 2:
+                        error_2 = _a.sent();
+                        // Fallback para dados simulados
+                        return [2 /*return*/, this.getMockWeatherRange(req.days)];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    WeatherRangeService.prototype.fetchWeatherData = function (req) {
         return __awaiter(this, void 0, void 0, function () {
             var response;
             return __generator(this, function (_a) {
@@ -106,12 +175,34 @@ var WeatherService = /** @class */ (function () {
             });
         });
     };
+    WeatherRangeService.prototype.fetchWeatherRangeData = function (req, days) {
+        return __awaiter(this, void 0, void 0, function () {
+            var response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, axios_1.default.get(this.baseUrl, {
+                            params: {
+                                latitude: req.lat,
+                                longitude: req.lon,
+                                daily: 'temperature_2m_max,temperature_2m_min,precipitation_probability_max,weathercode',
+                                timezone: 'auto',
+                                forecast_days: days
+                            },
+                            timeout: 10000
+                        })];
+                    case 1:
+                        response = _a.sent();
+                        return [2 /*return*/, response.data];
+                }
+            });
+        });
+    };
     // Weather codes da Open-Meteo: https://open-meteo.com/en/docs
-    WeatherService.prototype.isSunny = function (code) {
+    WeatherRangeService.prototype.isSunny = function (code) {
         // 0 = Clear sky, 1 = Mainly clear
         return code === 0 || code === 1;
     };
-    WeatherService.prototype.getMockWeight = function () {
+    WeatherRangeService.prototype.getMockWeight = function () {
         var sunny = Math.random() > 0.5;
         var rainChance = Math.floor(Math.random() * 100);
         var tempMin = Math.floor(Math.random() * 20 + 10);
@@ -130,6 +221,44 @@ var WeatherService = /** @class */ (function () {
             conditions: { sunny: sunny, rainChance: rainChance, tempMin: tempMin, tempMax: tempMax }
         };
     };
-    return WeatherService;
+    WeatherRangeService.prototype.getMockWeatherRange = function (days) {
+        var dailyData = [];
+        var totalWeight = 0;
+        for (var i = 0; i < days; i++) {
+            var date = new Date();
+            date.setDate(date.getDate() + i);
+            var sunny = Math.random() > 0.5;
+            var rainChance = Math.floor(Math.random() * 100);
+            var tempMin = Math.floor(Math.random() * 20 + 10);
+            var tempMax = tempMin + Math.floor(Math.random() * 15 + 5);
+            var weatherCode = sunny ? (Math.random() > 0.5 ? 0 : 1) : Math.floor(Math.random() * 10 + 10);
+            var weight = 1.0;
+            if (sunny)
+                weight += 0.5;
+            if (rainChance < 30)
+                weight += 0.3;
+            if (tempMin >= 18 && tempMax <= 28)
+                weight += 0.2;
+            else if (tempMin < 10 || tempMax > 35)
+                weight -= 0.3;
+            weight = Math.round(weight * 100) / 100;
+            totalWeight += weight;
+            dailyData.push({
+                date: date.toISOString().split('T')[0],
+                weight: weight,
+                sunny: sunny,
+                rainChance: rainChance,
+                tempMin: tempMin,
+                tempMax: tempMax,
+                weatherCode: weatherCode
+            });
+        }
+        return {
+            days: dailyData,
+            averageWeight: Math.round((totalWeight / days) * 100) / 100,
+            totalDays: days
+        };
+    };
+    return WeatherRangeService;
 }());
-exports.WeatherService = WeatherService;
+exports.WeatherRangeService = WeatherRangeService;
