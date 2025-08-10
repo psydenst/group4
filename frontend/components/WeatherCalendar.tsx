@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
+
 import { WeatherData } from '@/types';
 import { Cloud, CloudRain, Sun, CloudSnow, Zap, X } from 'lucide-react';
 import { format, addDays, isSameDay } from 'date-fns';
 
 // Definindo o tipo Value manualmente para evitar o erro de importação da biblioteca.
-type Value = Date | Date[] | null;
+type CalendarValue = Date | Date[] | null;
 
 interface WeatherCalendarProps {
   productId: string;
@@ -29,7 +30,7 @@ const generateWeatherData = (): WeatherData[] => {
   const weatherConditions: WeatherData['condition'][] = ['sunny', 'cloudy', 'rainy', 'stormy', 'snowy'];
   const data: WeatherData[] = [];
   
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 365; i++) {
     const date = addDays(new Date(), i);
     const condition = weatherConditions[Math.floor(Math.random() * weatherConditions.length)];
     data.push({
@@ -43,8 +44,16 @@ const generateWeatherData = (): WeatherData[] => {
   return data;
 };
 
+const getProductPrice = (productId: string): number =>  {
+  if (productId == '1')
+  {
+    return 10;
+  }
+  return 0;
+}
+
 export default function WeatherCalendar({ productId, productName, onClose, onDateSelect }: WeatherCalendarProps) {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
 
   useEffect(() => {
@@ -57,7 +66,7 @@ export default function WeatherCalendar({ productId, productName, onClose, onDat
     );
   };
 
-  const tileContent = ({ date, view }: { date: Date; view: string }) => {
+  const tileContent = ({ date, view}: { date: Date; view: string}) => {
     if (view === 'month') {
       const weather = getWeatherForDate(date);
       if (weather) {
@@ -77,7 +86,7 @@ export default function WeatherCalendar({ productId, productName, onClose, onDat
 
   // A função onChange da biblioteca Calendar espera um valor do tipo "Value" e um evento.
   // Ajustamos a assinatura da função para usar o tipo Value que definimos.
-  const handleDateChange = (value: Value[]) => {
+  const handleDateChange = (value: CalendarValue | CalendarValue[], event: React.MouseEvent<HTMLButtonElement>) => {
     if (value && !Array.isArray(value)) {
       setSelectedDate(value);
     }
@@ -112,8 +121,9 @@ export default function WeatherCalendar({ productId, productName, onClose, onDat
             value={selectedDate}
             tileContent={tileContent}
             minDate={new Date()}
-            maxDate={addDays(new Date(), 30)}
+            maxDate={addDays(new Date(), 365)}
             className="w-full"
+            selectRange={false}
           />
         </div>
 
