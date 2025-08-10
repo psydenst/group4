@@ -82,3 +82,5 @@ Temporary Items
 # Temporary files
 tmp/
 temp/
+
+/generated/prisma
