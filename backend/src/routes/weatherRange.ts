@@ -7,7 +7,7 @@ import { WeatherRangeRequest, WeatherRangeResponse } from '../types/weatherRange
 const weatherRangeRoutes: FastifyPluginAsync = async (fastify) => {
   const weather = new WeatherRangeService();
 
-  fastify.get('/weather-range', {
+  fastify.get('/', {
     schema: {
       querystring: {
         type: 'object',

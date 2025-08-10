@@ -9,9 +9,8 @@ const server = fastify({ logger: true });
 // Rota básica
 server.get('/', async () => ({ status: 'ok' }));
 
-// Registrar clima
 server.register(weatherRoutes, { prefix: '/weather' });
-server.register(weatherRangeRouter, {prefix: '/weather_range'});
+server.register(weatherRangeRouter, {prefix: '/weather-range'});
 
 // Iniciar
 server.listen({ port: 8080, host: '0.0.0.0' }, (err) => {
