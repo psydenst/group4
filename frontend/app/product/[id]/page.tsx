@@ -2,64 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Product, WeatherData } from '@/types';
+import { IProduct } from '@/types';
 import { ArrowLeft, Calendar, Clock, MapPin, Star, Users, Shield, Award } from 'lucide-react';
 import Image from 'next/image';
 import WeatherCalendar from '@/components/WeatherCalendar';
 import Header from '@/components/Header';
 
-const mockProducts: Product[] = [
-  {
-    id: '1',
-    name: 'Mountain Adventure Hiking',
-    description: 'Experience breathtaking views and challenging trails in the Rocky Mountains. Perfect for adventure seekers looking for an unforgettable outdoor experience.',
-    price: 149,
-    image: 'https://trampolin-jumping-rio.staging.ticketbro.com/_next/image?url=https%3A%2F%2Fdrw21st1r555p.cloudfront.net%2Foptimized%2FDEFAULT%2F7c00cd54-ebf1-4003-8762-c7f86f22ab0e-1x-optimized&w=384&q=75',
-    category: 'Adventure Sports',
-  },
-  {
-    id: '2',
-    name: 'Sunset Sailing Experience',
-    description: 'Sail into the golden hour with our premium sunset cruise. Enjoy champagne and gourmet snacks while watching the sun dip below the horizon.',
-    price: 89,
-    image: 'https://beach-tennis-rio.staging.ticketbro.com/_next/image?url=https%3A%2F%2Fdrw21st1r555p.cloudfront.net%2Foptimized%2FDEFAULT%2F02ff7d65-572a-4708-a32d-80dae08c9cfa-2x-optimized&w=256&q=75',
-    category: 'Water Sports',
-  },
-  {
-    id: '3',
-    name: 'Wine Tasting Tour',
-    description: 'Discover the finest local wines with our expert sommelier guide. Visit three premium wineries and learn about the art of winemaking.',
-    price: 125,
-    image: 'https://images.pexels.com/photos/1407846/pexels-photo-1407846.jpeg?auto=compress&cs=tinysrgb&w=800',
-    category: 'Food & Drink',
-  },
-  {
-    id: '4',
-    name: 'Photography Workshop',
-    description: 'Master the art of landscape photography with professional guidance. Capture stunning shots in the most photogenic locations.',
-    price: 199,
-    image: 'https://images.pexels.com/photos/1264210/pexels-photo-1264210.jpeg?auto=compress&cs=tinysrgb&w=800',
-    category: 'Creative Arts',
-  },
-  {
-    id: '5',
-    name: 'Spa & Wellness Retreat',
-    description: 'Rejuvenate your mind and body with our luxury spa treatments. Includes massage, facial, and access to thermal pools.',
-    price: 299,
-    image: 'https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&cs=tinysrgb&w=800',
-    category: 'Wellness',
-  },
-  {
-    id: '6',
-    name: 'Culinary Masterclass',
-    description: 'Learn to cook like a professional chef with hands-on instruction. Create a three-course meal using fresh, local ingredients.',
-    price: 175,
-    image: 'https://images.pexels.com/photos/2284166/pexels-photo-2284166.jpeg?auto=compress&cs=tinysrgb&w=800',
-    category: 'Food & Drink',
-  },
-];
-
-// Generate time slots with 30-minute intervals from 8:00 AM to 8:00 PM
 const generateTimeSlots = () => {
   const slots = [];
   const startHour = 8; // 8:00 AM
@@ -91,37 +39,66 @@ const generateTimeSlots = () => {
 export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [product, setProduct] = useState<Product | null>(null);
+  const [product, setProduct] = useState<IProduct | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [participants, setParticipants] = useState<number>(1);
   const [showCalendar, setShowCalendar] = useState(false);
   const [timeSlots] = useState(generateTimeSlots());
+  const [findedProduct, setFindedProduct] = useState(true); 
 
   useEffect(() => {
+    const fetchProduct = async (id: string) => {
+      try {
+        const response = await fetch(`http://localhost:8080/products/getOne?id=${id}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+
+        const data: IProduct = await response.json();
+        setProduct(data);
+        setFindedProduct(true);
+      } catch (err: any) {
+        setFindedProduct(false);
+      } finally {
+      }
+    };
+    
     const productId = params.id as string;
-    const foundProduct = mockProducts.find(p => p.id === productId);
-    setProduct(foundProduct || null);
+
+    fetchProduct(productId);
   }, [params.id]);
 
   if (!product) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Product not found</h1>
-          <button
-            onClick={() => router.push('/')}
-            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold"
-          >
-            Back to Home
-          </button>
-        </div>
-      </div>
-    );
+    return<></>;//Loading effect here
   }
 
   const calculateTotal = () => {
-    return product.price * participants;
+    try {
+      // const response = await fetch('http://localhost:8080/price',
+      //   {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json', // Informa ao servidor que o corpo é JSON
+      //     },
+      //     body: JSON.stringify({
+      //       productId: product.id,
+      //       selectedDay: selectedDate,
+      //       latitude: product.latitude,
+      //       longitude: product.longitude,
+      //     }),
+      //   }
+      // );
+
+      // if (!response.ok) {
+      //   throw new Error('Failed to fetch products');
+      // }
+      
+      //const data  = await response.json();
+    }catch {
+      return 10;
+    }
+    return product.productConfig.basePrice;
   };
 
   const handleBooking = () => {
@@ -167,7 +144,7 @@ export default function ProductDetailPage() {
             {/* Product Image */}
             <div className="relative h-96 rounded-2xl overflow-hidden">
               <Image
-                src={product.image}
+                src={product.img_link}
                 alt={product.name}
                 fill
                 className="object-cover"
@@ -182,7 +159,7 @@ export default function ProductDetailPage() {
             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
               <div className="flex items-center gap-2 text-white/70 mb-3">
                 <MapPin className="w-4 h-4" />
-                <span className="text-sm">{product.category}</span>
+                <span className="text-sm">{selectedDate?.toLocaleString()}</span>
               </div>
               
               <h1 className="text-3xl font-bold text-white mb-4">{product.name}</h1>
@@ -286,7 +263,7 @@ export default function ProductDetailPage() {
               <div className="bg-white/5 rounded-xl p-4 mb-6">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-white/80">Price per person:</span>
-                  <span className="text-white font-semibold">${product.price}</span>
+                  <span className="text-white font-semibold">${product.personPrice}</span>
                 </div>
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-white/80">Participants:</span>
