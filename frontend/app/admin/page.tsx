@@ -21,7 +21,7 @@ export default function AdminPage() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      router.push('/managerproducts');
+      router.push('/manageproducts');
     }, 500);
   }
 
@@ -56,7 +56,7 @@ export default function AdminPage() {
             disabled={loading}
             className={`${baseButtonClasses} bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-500 disabled:to-gray-600`}
           >
-            {loadingDashboard ? 'Loading...' : 'Dashboards'}
+            {loading ? 'Loading...' : 'Dashboards'}
           </button>
 
           <button
@@ -73,7 +73,6 @@ export default function AdminPage() {
             className={`${baseButtonClasses} bg-gradient-to-r from-blue-500 to-purple-600 hover:from-yellow-500 hover:to-yellow-600`}
           >
             Manage Reservations
->>>>>>> main
           </button>
         </div>
       </div>

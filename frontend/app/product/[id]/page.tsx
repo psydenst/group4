@@ -98,7 +98,7 @@ export default function ProductDetailPage() {
     }catch {
       return 10;
     }
-    return product.productConfig.basePrice;
+    return product.productConfig.basePrice + (participants * product.personPrice);
   };
 
   const handleBooking = () => {

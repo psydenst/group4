@@ -37,6 +37,7 @@ export const getOneProduct = async (id: number) => {
         longitude: true,
         name: true,
         productConfig: true,
+        personPrice: true,
       },
     });
     return product;
