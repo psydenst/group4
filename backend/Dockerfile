@@ -1,20 +1,20 @@
-# Dockerfile
+# Use uma imagem base leve
 FROM node:20-alpine
 
-# Set working directory
+# Crie e defina o diretório de trabalho
 WORKDIR /app
 
-# Copy package files
+# Copie apenas os arquivos de dependência e instale-os para usar o cache
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
 
-# Copy source code
+# Copie todo o resto do código da aplicação
 COPY . .
 
-# Expose port
+# Expõe a porta que o Fastify usa
 EXPOSE 8080
 
-# Start in development mode
+# Comando para iniciar a aplicação
 CMD ["npm", "run", "dev"]
+
+

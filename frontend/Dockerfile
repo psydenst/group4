@@ -1,19 +1,20 @@
+# Use uma imagem base leve
 FROM node:20-alpine
 
-# Set working directory
+# Crie e defina o diretório de trabalho
 WORKDIR /app
 
-# Copy package files
+# Copie apenas os arquivos de dependência e instale-os para usar o cache
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
 
-# Copy source code
+# Copie o resto do código da aplicação
 COPY . .
 
-# Expose port
+# Expõe a porta
 EXPOSE 3000
 
-# Start in development mode
+# Comando para iniciar
 CMD ["npm", "run", "dev"]
+
+

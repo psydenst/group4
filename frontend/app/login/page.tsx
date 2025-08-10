@@ -1,42 +1,134 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Calendar, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
-import { signInWithEmail, signInWithGoogle, getCurrentUser, onAuthStateChange } from '../utils/auth';
+import { signInWithEmail, signInWithGoogle, isAuthenticated, onAuthStateChange, handleOAuthCallback, cleanUrlParams } from '../utils/auth';
+
+import { useCleanUrl } from '../hooks/clean';
 
 
 export default function LoginPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState('');
+  const [error, setError] = useState('');
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+
+	cleanUrlParams();
+
+  // Verificar autenticação de forma segura
+  useEffect(() => {
+
+    const checkUserAuth = async () => {
+      try {
+        // Primeiro, verifica se há parâmetros OAuth na URL e processa
+        const urlParams = new URLSearchParams(window.location.search);
+        const hasOAuthParams = urlParams.has('code') || 
+                              urlParams.has('access_token') || 
+                              window.location.hash.includes('access_token');
+
+        if (hasOAuthParams) {
+          // Processa o callback OAuth e limpa a URL
+          const { user, needsRedirect } = await handleOAuthCallback();
+          if (user && needsRedirect) {
+            router.push('/');
+            return;
+          }
+        } else {
+          // Verificação normal de autenticação
+          const authenticated = await isAuthenticated();
+          if (authenticated) {
+            router.push('/');
+            return;
+          }
+        }
+      } catch (err) {
+        console.error('Erro ao verificar autenticação:', err);
+        cleanUrlParams(); // Limpa a URL mesmo em caso de erro
+      } finally {
+        setIsCheckingAuth(false);
+      }
+    };
+
+    checkUserAuth();
+
+    // Escutar mudanças de autenticação
+    const { data: { subscription } } = onAuthStateChange((user) => {
+      if (user) {
+        // Pequeno delay para garantir que a URL foi limpa
+        setTimeout(() => {
+          router.push('/');
+        }, 100);
+      }
+    });
+
+    return () => {
+      subscription?.unsubscribe();
+    };
+  }, [router]);
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email.trim() || !password.trim()) {
+      setError('Por favor, preencha todos os campos');
+      return;
+    }
+
     setIsLoading(true);
-    
-    // Simulate login process
-    setTimeout(() => {
+    setError('');
+
+    try {
+      const result = await signInWithEmail(email, password);
+      
+      if (result.success) {
+        // Login bem-sucedido - o redirecionamento será feito pelo useEffect
+        console.log('Login realizado com sucesso');
+      } else {
+        setError(result.error || 'Falha no login');
+      }
+    } catch (err) {
+      setError('Erro inesperado. Tente novamente.');
+      console.error('Erro no login:', err);
+    } finally {
       setIsLoading(false);
-      alert('Login functionality would be implemented here!');
-    }, 1500);
+    }
   };
 
-	const handleGoogleLogin = async () => {
-		setIsLoading(true);
-		setError('');
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    setError('');
 
-		const result = await signInWithGoogle();
-		
-		if (!result.success) {
-			setError(result.error || 'Erro no login com Google');
-			setIsLoading(false);
-		}
-		// Para OAuth, o loading continuará até o redirecionamento
-	};
+    try {
+      const result = await signInWithGoogle();
+      
+      if (!result.success) {
+        setError(result.error || 'Falha no login com Google');
+        setIsLoading(false);
+      }
+      // Para OAuth, o loading continuará até o redirecionamento
+    } catch (err) {
+      setError('Falha no login com Google');
+      setIsLoading(false);
+      console.error('Erro no login com Google:', err);
+    }
+  };
+
+  // Mostrar loading enquanto verifica autenticação
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex items-center gap-2 text-white">
+          <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+          Verificando autenticação...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
