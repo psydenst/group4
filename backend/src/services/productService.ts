@@ -9,7 +9,7 @@ export const getAllProducts = async () => {
   try {
     const products = await prisma.product.findMany({
       include: {
-        product_configs: true,
+        productConfig: true,
       },
     });
 
