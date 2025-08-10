@@ -98,7 +98,7 @@ export default function ProductDetailPage() {
     }catch {
       return 10;
     }
-    return product.productConfig.basePrice;
+    return product.productConfig.basePrice + (participants * product.personPrice);
   };
 
   const handleBooking = () => {
@@ -135,7 +135,7 @@ export default function ProductDetailPage() {
           className="flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
-          Back to Experiences
+          Back to Home
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">

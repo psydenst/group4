@@ -25,32 +25,28 @@ const weatherIcons = {
   snowy: CloudSnow,
 };
 
+const getDaysTemp = () => {
+  return 0;
+}
+
 // Mock weather data generator
 const generateWeatherData = (): WeatherData[] => {
   const weatherConditions: WeatherData['condition'][] = ['sunny', 'cloudy', 'rainy', 'stormy', 'snowy'];
   const data: WeatherData[] = [];
   
-  for (let i = 0; i < 365; i++) {
+  for (let i = 1; i < 17; i++) {
     const date = addDays(new Date(), i);
     const condition = weatherConditions[Math.floor(Math.random() * weatherConditions.length)];
     data.push({
       date: format(date, 'yyyy-MM-dd'),
       condition,
-      temperature: Math.floor(Math.random() * 30) + 10,
+      temperature: getDaysTemp(),
       icon: condition,
     });
   }
   
   return data;
 };
-
-const getProductPrice = (productId: string): number =>  {
-  if (productId == '1')
-  {
-    return 10;
-  }
-  return 0;
-}
 
 export default function WeatherCalendar({ productId, productName, onClose, onDateSelect }: WeatherCalendarProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
@@ -121,7 +117,7 @@ export default function WeatherCalendar({ productId, productName, onClose, onDat
             value={selectedDate}
             tileContent={tileContent}
             minDate={new Date()}
-            maxDate={addDays(new Date(), 365)}
+            maxDate={addDays(new Date(), 15)}
             className="w-full"
             selectRange={false}
           />

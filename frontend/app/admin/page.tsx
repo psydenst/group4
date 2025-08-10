@@ -21,7 +21,7 @@ export default function AdminPage() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      router.push('/managerproducts');
+      router.push('/manageproducts');
     }, 500);
   }
 
@@ -33,7 +33,7 @@ export default function AdminPage() {
     }, 500);
   }
 
-  const baseButtonClasses = 
+  const baseButtonClasses =
     "w-full font-semibold text-white py-3 px-4 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:hover:scale-100";
 
   return (
@@ -56,7 +56,7 @@ export default function AdminPage() {
             disabled={loading}
             className={`${baseButtonClasses} bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-500 disabled:to-gray-600`}
           >
-            {loading ? 'Carregando...' : 'Dashboards'}
+            {loading ? 'Loading...' : 'Dashboards'}
           </button>
 
           <button
