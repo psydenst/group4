@@ -1,7 +1,7 @@
 import fastify from 'fastify';
 import dotenv from 'dotenv';
 import weatherRoutes from './routes/weather';
-
+import weatherRangeRouter from './routes/weatherRange';
 dotenv.config();
 
 const server = fastify({ logger: true });
@@ -11,6 +11,7 @@ server.get('/', async () => ({ status: 'ok' }));
 
 // Registrar clima
 server.register(weatherRoutes, { prefix: '/weather' });
+server.register(weatherRangeRouter, {prefix: '/weather_range'});
 
 // Iniciar
 server.listen({ port: 8080, host: '0.0.0.0' }, (err) => {
