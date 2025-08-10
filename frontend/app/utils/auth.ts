@@ -1,4 +1,4 @@
-// utils/auth.ts
+// utils/auth.ts - Versão atualizada
 import { supabase } from '../lib/supabase';
 import type { User } from '@supabase/supabase-js';
 
@@ -8,13 +8,19 @@ export interface AuthResult {
   error?: string;
 }
 
-// Login com Google
+// Login com Google - USANDO PKCE FLOW (mais seguro)
 export const signInWithGoogle = async (): Promise<AuthResult> => {
   try {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/dashboard`
+        redirectTo: `${window.location.origin}/auth/callback`,
+				flowType: 'pkce', // Usar PKCE flow
+        // Usar PKCE flow - mais seguro que implicit flow
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        }
       }
     });
 
@@ -25,11 +31,8 @@ export const signInWithGoogle = async (): Promise<AuthResult> => {
       };
     }
 
-    // Para OAuth, o usuário não está imediatamente disponível
-    // O login acontece via redirecionamento
     return {
       success: true,
-      // Não retornamos user aqui porque ele só estará disponível após o callback
     };
   } catch (error: any) {
     return {
@@ -104,7 +107,6 @@ export const logout = async (): Promise<AuthResult> => {
         error: error.message
       };
     }
-
     return { success: true };
   } catch (error: any) {
     return {
@@ -131,6 +133,24 @@ export const onAuthStateChange = (callback: (user: User | null) => void) => {
   });
 };
 
+// Função para limpar dados sensíveis da URL
+export const cleanUrlFromTokens = () => {
+  if (typeof window !== 'undefined') {
+    const url = new URL(window.location.href);
+    const hasTokens = url.searchParams.has('access_token') || 
+                     url.searchParams.has('refresh_token') || 
+                     url.searchParams.has('code') ||
+                     url.hash.includes('access_token');
 
+    if (hasTokens) {
+      // Limpar query params
+      url.search = '';
+      // Limpar hash
+      url.hash = '';
+      // Substituir no histórico sem adicionar nova entrada
+      window.history.replaceState({}, '', url.pathname);
+    }
+  }
+};
 
 
