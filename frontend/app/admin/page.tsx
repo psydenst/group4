@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Grid } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 
 export default function AdminPage() {
   const [loading, setLoading] = useState(false);
@@ -24,10 +24,10 @@ export default function AdminPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <Grid className="w-8 h-8 text-blue-400" />
-            <span className="text-2xl font-bold text-white">Admin Panel</span>
+            <Calendar className="w-8 h-8 text-blue-400" />
+            <span className="text-2xl font-bold text-white">BookNow</span>
           </Link>
-          <h1 className="text-3xl font-bold text-white mb-2">Admin Dashboard</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">Admin Panel</h1>
           <p className="text-white/70">Welcome to the admin panel.</p>
         </div>
 
