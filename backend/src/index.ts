@@ -4,6 +4,7 @@ import weatherRoutes from './routes/weather';
 import productsRoutes from './routes/products';
 import cors from '@fastify/cors'; // <-- Importe o plugin cors
 
+import weatherRangeRouter from './routes/weatherRange';
 dotenv.config();
 
 const server = fastify({ logger: true });
@@ -19,6 +20,7 @@ server.get('/', async () => ({ status: 'ok' }));
 
 // Registrar clima
 server.register(weatherRoutes, { prefix: '/weather' });
+server.register(weatherRangeRouter, {prefix: '/weather_range'});
 
 // Registrar produtos
 server.register(productsRoutes, { prefix: '/products' });
